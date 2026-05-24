@@ -1,0 +1,18 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environments / Virtual environments
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Large media files and caches
+downloads/
+vector_db/
+*.wav
+*.mp3
