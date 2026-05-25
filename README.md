@@ -4,6 +4,8 @@ Architecture Diagram
 Review
 Architecture Diagram
 
+![Architecture Diagram](file:///C:/Users/Sanath/.gemini/antigravity/brain/c5152766-424e-417b-9147-28cfd7f1d2a7/architecture_diagram_1779684254006.png)
+
 Overview
 This project is a Streamlit‑based AI Video Assistant that extracts audio from YouTube videos (or local video files), transcribes the content, generates a concise summary and title, extracts actionable insights (action items, key decisions, open questions), and provides an interactive RAG‑powered chat interface to query the meeting transcript.
 
