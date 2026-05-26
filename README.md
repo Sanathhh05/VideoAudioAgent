@@ -34,6 +34,12 @@ The system consists of several modular components:
 
 The architecture diagram above visualises the data flow and module interactions.
 
+##Images
+
+<img width="1326" height="843" alt="Screenshot 2026-05-26 123324" src="https://github.com/user-attachments/assets/bb73073a-8a59-4cad-8a7a-fae162751a59" />
+<img width="1539" height="831" alt="Screenshot 2026-05-26 123308" src="https://github.com/user-attachments/assets/d7403154-182a-499a-bf05-cff552c06938" />
+<img width="1420" height="810" alt="Screenshot 2026-05-26 123220" src="https://github.com/user-attachments/assets/a9da2119-1c55-4e30-a43d-4f9a3ec72f0a" />
+
 ## Installation
 
 1. **Clone the repository**  
