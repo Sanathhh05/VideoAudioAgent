@@ -33,8 +33,8 @@ def transcribe_chunk_whisper(chunk_path: str) -> str:
 
     model = load_model()  
 
-    result = model.transcribe(chunk_path, task="transcribe")  
-    return result["text"]  
+    result = model.transcribe(chunk_path, task="transcribe", fp16=False, word_timestamps=False)  
+    return result["segments"]  
 
 
 def _send_to_sarvam(piece_path: str) -> str:
@@ -103,7 +103,7 @@ def transcribe_chunk(chunk_path: str, language: str = "english") -> str:
     return transcribe_chunk_whisper(chunk_path)
 
 
-def transcribe_all(chunks: list, language: str = "english") -> str:
+#def transcribe_all(chunks: list, language: str = "english") -> str:
 
     full_transcript = "" 
 
@@ -120,4 +120,94 @@ def transcribe_all(chunks: list, language: str = "english") -> str:
 
     print("Transcription complete.")
 
-    return full_transcript.strip()  
+    return full_transcript.strip()
+#
+
+#def transcribe_all(chunks: list, language: str = "english") -> list:
+
+    all_segments = []
+
+    engine = "Sarvam AI" if language.lower() == "hinglish" else "Whisper"
+    print(f"Using {engine} for transcription.")
+
+    CHUNK_DURATION = 600  # 10 minutes in seconds
+
+    for i, chunk in enumerate(chunks):
+
+        print(f"Transcribing chunk {i + 1}/{len(chunks)}...")
+
+        segments = transcribe_chunk(chunk, language=language)
+
+        chunk_offset = i * CHUNK_DURATION
+
+        for seg in segments:
+            all_segments.append({
+                "start": seg["start"] + chunk_offset,
+                "end": seg["end"] + chunk_offset,
+                "text": seg["text"].strip()
+            })
+
+    print("Transcription complete.")
+
+    return all_segments#
+
+def transcribe_all(chunks: list, language: str = "english"):
+
+    engine = "Sarvam AI" if language.lower() == "hinglish" else "Whisper"
+    print(f"Using {engine} for transcription.")
+
+    # ---------------------------
+    # HINGLISH (Sarvam)
+    # ---------------------------
+    if language.lower() == "hinglish":
+
+        full_transcript = ""
+
+        for i, chunk in enumerate(chunks):
+            print(f"Transcribing chunk {i + 1}/{len(chunks)}...")
+
+            text = transcribe_chunk(chunk, language=language)
+
+            full_transcript += text + " "
+
+        print("Transcription complete.")
+
+        return full_transcript.strip()
+
+    # ---------------------------
+    # ENGLISH (Whisper)
+    # ---------------------------
+    all_segments = []
+
+    CHUNK_DURATION = 600  # 10 min chunks
+
+    for i, chunk in enumerate(chunks):
+
+        print(f"Transcribing chunk {i + 1}/{len(chunks)}...")
+
+        segments = transcribe_chunk(chunk, language=language)
+
+        chunk_offset = i * CHUNK_DURATION
+
+        for seg in segments:
+            all_segments.append({
+                "start": seg["start"] + chunk_offset,
+                "end": seg["end"] + chunk_offset,
+                "text": seg["text"].strip()
+            })
+
+    print("Transcription complete.")
+
+    return all_segments
+
+def format_timestamp(seconds):
+    mins = int(seconds // 60)
+    secs = int(seconds % 60)
+    return f"{mins:02}:{secs:02}"
+
+
+def format_transcript(segments):
+    return "\n".join(
+        f"[{format_timestamp(seg['start'])}] {seg['text']}"
+        for seg in segments
+    )  

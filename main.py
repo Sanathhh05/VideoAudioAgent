@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
 from utils.audio_processor import process_input
-from core.transcriber import transcribe_all
+from core.transcriber import format_transcript, transcribe_all
 from core.summarize import summarize, generate_title
 from core.extractor import extract_action_items, extract_key_decisions, extract_questions
 from core.rag_engine import build_rag_chain, ask_question
+import warnings
 
+warnings.filterwarnings("ignore")
 
 load_dotenv()
 
@@ -13,23 +15,46 @@ def run_pipeline(source :str, language :str = "english") -> dict:
 
     chunks = process_input(source)
 
-    transcript = transcribe_all(chunks,language)
-    print(f"raw transcription (first 300 characters ) {transcript[:300]}")
+    #transcript = transcribe_all(chunks,language)
+    #print(f"raw transcription (first 300 characters ) {transcript[:300]}")
 
-    title = generate_title(transcript)
+    #segments = transcribe_all(chunks, language)
 
-    summary = summarize(transcript)
+    #timestamped_transcript = format_transcript(segments)
 
-    action_item = extract_action_items(transcript)
-
-    decisions = extract_key_decisions(transcript)
-    questions = extract_questions(transcript)
+    #plain_transcript = " ".join(
+    #    seg["text"] for seg in segments
+    #)
     
-    rag_chain = build_rag_chain(transcript)
+    transcript = transcribe_all(chunks, language)
+
+    if isinstance(transcript, list):
+        timestamped_transcript = format_transcript(transcript)
+
+        plain_transcript = " ".join(
+        seg["text"] for seg in transcript
+        )
+    else:
+        plain_transcript = transcript
+        timestamped_transcript = transcript
+    
+    print(f"raw transcription (first 300 chars): {plain_transcript[:300]}")
+
+    title = generate_title(plain_transcript)
+
+    summary = summarize(plain_transcript)
+
+    action_item = extract_action_items(plain_transcript)
+
+    decisions = extract_key_decisions(plain_transcript)
+    questions = extract_questions(plain_transcript)
+
+    rag_chain = build_rag_chain(plain_transcript)
 
     return {
         "title": title,
-        "transcript": transcript,
+        "transcript": plain_transcript,
+        "timestamped_transcript": timestamped_transcript,
         "summary": summary,
         "action_items": action_item,
         "key_decisions": decisions,
