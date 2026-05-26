@@ -34,7 +34,7 @@ The system consists of several modular components:
 
 The architecture diagram above visualises the data flow and module interactions.
 
-##Images
+## Images
 
 <img width="1326" height="843" alt="Screenshot 2026-05-26 123324" src="https://github.com/user-attachments/assets/bb73073a-8a59-4cad-8a7a-fae162751a59" />
 <img width="1539" height="831" alt="Screenshot 2026-05-26 123308" src="https://github.com/user-attachments/assets/d7403154-182a-499a-bf05-cff552c06938" />
