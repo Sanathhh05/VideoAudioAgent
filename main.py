@@ -4,9 +4,12 @@ from core.transcriber import format_transcript, transcribe_all
 from core.summarize import summarize, generate_title
 from core.extractor import extract_action_items, extract_key_decisions, extract_questions
 from core.rag_engine import build_rag_chain, ask_question
-import warnings
+import warnings, os, logging
 
 warnings.filterwarnings("ignore")
+# Suppress transformers logs
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+logging.getLogger("transformers").setLevel(logging.ERROR)
 
 load_dotenv()
 

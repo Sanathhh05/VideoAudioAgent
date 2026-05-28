@@ -2,9 +2,12 @@ import io
 import streamlit as st
 from dotenv import load_dotenv
 from fpdf import FPDF
-import warnings
+import warnings, os, logging
 
 warnings.filterwarnings("ignore")
+# Suppress transformers logs
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+logging.getLogger("transformers").setLevel(logging.ERROR)
 
 # Import your existing core modules
 from utils.audio_processor import process_input
